@@ -1,6 +1,6 @@
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import { shuffle } from 'lodash'
-import { useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { playlistState, playlistIdState } from '../atoms/playlistAtom'
@@ -24,25 +24,30 @@ function Center() {
   const playlistId = useRecoilValue(playlistIdState)
   const [playlist, setPlaylist] = useRecoilState(playlistState)
 
+  console.log(playlistId)
+
   useEffect(() => {
     setColor(shuffle(colors).pop())
   }, [playlistId])
 
   useEffect(() => {
-    spotifyApi
-      .getPlaylist(playlistId)
-      .then((data) => {
+    spotifyApi.getPlaylist(playlistId).then(
+      function (data) {
+        console.log('Some information about this playlist', data.body)
         setPlaylist(data.body)
-      })
-      .catch((error) => console.log('Something went wrong...', error))
+      },
+      function (error) {
+        console.log('Something went wrong!', error)
+      }
+    )
   }, [spotifyApi, playlistId])
 
   console.log('Playlist', playlist)
 
   return (
-    <div className="flex-grow">
+    <div className="h-screen flex-grow overflow-y-scroll scrollbar-hide">
       <header className="absolute top-5 right-8">
-        <div className="flex cursor-pointer items-center space-x-3 rounded-full bg-red-300 p-1 pr-2 opacity-90 hover:opacity-80">
+        <div className="flex cursor-pointer items-center space-x-3 rounded-full bg-black p-1 pr-2 text-white opacity-90 hover:opacity-80" onClick={signOut}>
           {session?.user.image ? (
             <img
               src={session?.user.image ? session?.user.image : ''}
@@ -66,7 +71,7 @@ function Center() {
         </div>
       </header>
       <section
-        className={`padding-8 flex h-80 items-end space-x-7 bg-gradient-to-b ${color} to-black text-white`}
+        className={`flex h-80 items-end space-x-7 bg-gradient-to-b p-8 ${color} to-black text-white`}
       >
         <img
           className="h-44 w-44 shadow-2xl"
@@ -75,7 +80,9 @@ function Center() {
         />
         <div>
           <p>PLAYLIST</p>
-          <h1 className='text-2xl md:text-3xl xl:text-5xl font-bold'>{playlist?.name}</h1>
+          <h1 className="text-2xl font-bold md:text-3xl xl:text-5xl">
+            {playlist?.name}
+          </h1>
         </div>
       </section>
 
