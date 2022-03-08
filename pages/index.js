@@ -11,8 +11,8 @@ export default function Home() {
         <Center />
       </main>
 
-      <div>
-        <Player className="sticky bottom-0" />
+      <div className="sticky bottom-0">
+        <Player />
       </div>
     </div>
   )
