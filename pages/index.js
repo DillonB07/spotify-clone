@@ -6,6 +6,9 @@ import Player from '../components/Player'
 export default function Home() {
   return (
     <div className="h-screen overflow-hidden bg-black">
+      <Head>
+        <title>Spotify 2.0</title>
+      </Head>
       <main className="flex">
         <Sidebar />
         <Center />
