@@ -24,8 +24,6 @@ function Center() {
   const playlistId = useRecoilValue(playlistIdState)
   const [playlist, setPlaylist] = useRecoilState(playlistState)
 
-  console.log(playlistId)
-
   useEffect(() => {
     setColor(shuffle(colors).pop())
   }, [playlistId])
@@ -33,16 +31,15 @@ function Center() {
   useEffect(() => {
     spotifyApi.getPlaylist(playlistId).then(
       function (data) {
-        console.log('Some information about this playlist', data.body)
+        // console.log('Some information about this playlist', data.body)
         setPlaylist(data.body)
       },
       function (error) {
-        console.log('Something went wrong!', error)
+        // console.log('Something went wrong!', error)
       }
     )
   }, [spotifyApi, playlistId])
 
-  console.log('Playlist', playlist)
 
   return (
     <div className="h-screen flex-grow overflow-y-scroll scrollbar-hide">
