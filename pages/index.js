@@ -9,12 +9,6 @@ export default function Home() {
     <div className="h-screen overflow-hidden bg-black">
       <Head>
         <title>Spotify 2.0</title>
-        <link
-          rel="icon"
-          sizes="32x32"
-          type="image/png"
-          href="https://open.scdn.co/cdn/images/favicon32.8e66b099.png"
-        ></link>
       </Head>
       <main className="flex">
         <Sidebar />
