@@ -93,7 +93,7 @@ function Player() {
     const interval = setInterval(() => {
       if (spotifyApi.getAccessToken && !currentTrackId) {
         fetchCurrentSong()
-        setVolume(50)
+        // setVolume(50)
       }
     }, 1000)
 
