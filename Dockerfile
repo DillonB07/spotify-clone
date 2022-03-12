@@ -1,5 +1,6 @@
-FROM node:17.4.0
+FROM node:16.13.0
 COPY . .
 RUN yarn 
+RUN yarn build
 
-CMD ["yarn", "dev"]
+CMD ["yarn", "start"]
