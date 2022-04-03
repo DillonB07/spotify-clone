@@ -22,5 +22,5 @@ export const shuffleState = atom({
 
 export const volumeState = atom({
   key: 'volumeState',
-  default: 50,
+  default: null,
 })
