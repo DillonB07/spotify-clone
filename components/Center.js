@@ -64,7 +64,7 @@ function Center() {
 
   useEffect(() => {
     loadNextSongs()
-  }, [])
+  }, [playlistId, spotifyApi])
 
   return (
     <div className="h-screen flex-grow overflow-y-scroll scrollbar-hide">

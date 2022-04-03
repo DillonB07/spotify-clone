@@ -9,7 +9,7 @@ import { HeartIcon } from '@heroicons/react/solid'
 import { signOut, useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { playlistIdState } from '../atoms/playlistAtom'
+import { playlistIdState, playlistOffsetState } from '../atoms/playlistAtom'
 import useSpotify from '../hooks/useSpotify'
 
 function Sidebar() {
@@ -17,6 +17,8 @@ function Sidebar() {
   const { data: session, status } = useSession()
   const [playlists, setPlaylists] = useState([])
   const [playlistId, setPlaylistId] = useRecoilState(playlistIdState)
+  const [playlistOffset, setPlaylistOffset] =
+    useRecoilState(playlistOffsetState)
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
@@ -64,7 +66,10 @@ function Sidebar() {
           <p
             key={playlist.id}
             className="cursor-pointer hover:text-white"
-            onClick={() => setPlaylistId(playlist.id)}
+            onClick={() => {
+              setPlaylistOffset(0)
+              setPlaylistId(playlist.id)
+            }}
           >
             {playlist.name}
           </p>
