@@ -13,13 +13,14 @@ import {
 } from '@heroicons/react/solid'
 import { debounce } from 'lodash'
 import { useSession } from 'next-auth/react'
-import { useState, useEffect, useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import {
   currentTrackIdState,
   isPlayingState,
   repeatState,
   shuffleState,
+  volumeState,
 } from '../atoms/songAtom'
 import useSongInfo from '../hooks/useSongInfo'
 import useSpotify from '../hooks/useSpotify'
@@ -32,7 +33,7 @@ function Player() {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState)
   const [isRepeatingState, setRepeatState] = useRecoilState(repeatState)
   const [isShuffled, setIsShuffled] = useRecoilState(shuffleState)
-  const [volume, setVolume] = useState(50)
+  const [volume, setVolume] = useRecoilState(volumeState)
 
   const songInfo = useSongInfo()
 
@@ -45,6 +46,7 @@ function Player() {
           setIsPlaying(data.body?.is_playing)
           setRepeatState(data.body?.repeat_state)
           setIsShuffled(data.body?.shuffle_state)
+          setVolume(data.body?.device?.volume_percent)
         })
       })
     }
@@ -93,7 +95,6 @@ function Player() {
     const interval = setInterval(() => {
       if (spotifyApi.getAccessToken && !currentTrackId) {
         fetchCurrentSong()
-        // setVolume(50)
       }
     }, 1000)
 
