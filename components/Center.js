@@ -1,9 +1,15 @@
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import { shuffle } from 'lodash'
 import { useSession, signOut } from 'next-auth/react'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { playlistState, playlistIdState } from '../atoms/playlistAtom'
+import {
+  playlistState,
+  playlistIdState,
+  playlistTracksState,
+  playlistOffsetState,
+} from '../atoms/playlistAtom'
 import useSpotify from '../hooks/useSpotify'
 import Songs from './Songs'
 
@@ -23,6 +29,23 @@ function Center() {
   const [color, setColor] = useState(null)
   const playlistId = useRecoilValue(playlistIdState)
   const [playlist, setPlaylist] = useRecoilState(playlistState)
+  const [playlistTracks, setPlaylistTracks] =
+    useRecoilState(playlistTracksState)
+  const [playlistOffset, setPlaylistOffset] =
+    useRecoilState(playlistOffsetState)
+
+  const loadNextSongs = () => {
+    setPlaylistOffset(playlistOffset + 100)
+    spotifyApi.getPlaylistTracks(playlistId, { offset: playlistOffset }).then(
+      function (data) {
+        setPlaylistTracks(data.body?.items)
+        console.log(playlistTracks)
+      },
+      function (error) {
+        console.log(error)
+      }
+    )
+  }
 
   useEffect(() => {
     setColor(shuffle(colors).pop())
@@ -31,20 +54,25 @@ function Center() {
   useEffect(() => {
     spotifyApi.getPlaylist(playlistId).then(
       function (data) {
-        // console.log('Some information about this playlist', data.body)
         setPlaylist(data.body)
       },
       function (error) {
-        // console.log('Something went wrong!', error)
+        console.log(error)
       }
     )
   }, [spotifyApi, playlistId])
 
+  useEffect(() => {
+    loadNextSongs()
+  }, [])
 
   return (
     <div className="h-screen flex-grow overflow-y-scroll scrollbar-hide">
       <header className="absolute top-5 right-8">
-        <div className="flex cursor-pointer items-center space-x-3 rounded-full bg-black p-1 pr-2 text-white opacity-90 hover:opacity-80" onClick={signOut}>
+        <div
+          className="flex cursor-pointer items-center space-x-3 rounded-full bg-black p-1 pr-2 text-white opacity-90 hover:opacity-80"
+          onClick={signOut}
+        >
           {session?.user.image ? (
             <img
               src={session?.user.image ? session?.user.image : ''}
@@ -85,6 +113,14 @@ function Center() {
 
       <div>
         <Songs />
+        <p className="pb-28 text-center text-white">
+          <span
+            className="mt-5 cursor-pointer rounded-full bg-green-500 p-3"
+            onClick={loadNextSongs}
+          >
+            Load More
+          </span>
+        </p>
       </div>
     </div>
   )
