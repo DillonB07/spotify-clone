@@ -42,13 +42,13 @@ function Player() {
     if (!songInfo) {
       spotifyApi.getMyCurrentPlayingTrack().then((data) => {
         setCurrentIdTrack(data.body?.item?.id)
+      })
 
-        spotifyApi.getMyCurrentPlaybackState().then((data) => {
-          setIsPlaying(data.body?.is_playing)
-          setRepeatState(data.body?.repeat_state)
-          setIsShuffled(data.body?.shuffle_state)
-          setVolume(data.body?.device?.volume_percent)
-        })
+      spotifyApi.getMyCurrentPlaybackState().then((data) => {
+        setIsPlaying(data.body?.is_playing)
+        setIsShuffled(data.body?.shuffle_state)
+        setRepeatState(data.body?.repeat_state)
+        setVolume(data.body?.device?.volume_percent)
       })
     }
   }
@@ -116,9 +116,11 @@ function Player() {
 
   return (
     <>
-    <Head>
-      <title>{songInfo?.name} - {songInfo?.artists[0]?.name} | Spotify 2.0</title>
-    </Head>
+      <Head>
+        <title>
+          {songInfo?.name} - {songInfo?.artists[0]?.name} | Spotify 2.0
+        </title>
+      </Head>
       <div className="grid h-24 grid-cols-3 bg-gradient-to-b from-black to-gray-900 px-2 text-xs text-white md:px-8 md:text-base">
         {/* left */}
         <div className="flex items-center space-x-4">
