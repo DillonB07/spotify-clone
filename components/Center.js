@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from '@heroicons/react/outline'
+import { PlayIcon } from '@heroicons/react/solid'
 import { shuffle } from 'lodash'
 import { useSession, signOut } from 'next-auth/react'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import {
@@ -34,12 +34,21 @@ function Center() {
   const [playlistOffset, setPlaylistOffset] =
     useRecoilState(playlistOffsetState)
 
+  const playPlaylist = () => {
+    spotifyApi.play({ context_uri: `spotify:playlist:${playlistId}` })
+  }
+
+  const getMyCurrentPlaybackState = () => {
+    spotifyApi.getMyCurrentPlaybackState().then((data) => {
+      return data
+    })
+  }
+
   const loadNextSongs = () => {
     setPlaylistOffset(playlistOffset + 100)
     spotifyApi.getPlaylistTracks(playlistId, { offset: playlistOffset }).then(
       function (data) {
         setPlaylistTracks(data.body?.items)
-        console.log(playlistTracks)
       },
       function (error) {
         console.log(error)
@@ -103,6 +112,8 @@ function Center() {
           src={playlist?.images?.[0]?.url}
           alt={playlist?.name}
         />
+
+        <PlayIcon className="w-20 text-green-500" onClick={playPlaylist} />
         <div>
           <p>PLAYLIST</p>
           <h1 className="text-2xl font-bold md:text-3xl xl:text-5xl">

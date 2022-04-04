@@ -2,7 +2,6 @@ import { useRecoilState } from 'recoil'
 import useSpotify from '../hooks/useSpotify'
 import { millisToMinutesAndSeconds } from '../lib/time'
 import { currentTrackIdState, isPlayingState } from '../atoms/songAtom'
-import { ClipboardListIcon } from '@heroicons/react/outline'
 
 function Song({ order, track }) {
   const spotifyApi = useSpotify()
@@ -13,7 +12,10 @@ function Song({ order, track }) {
   const playSong = () => {
     setCurrentTrackId(track?.track?.id)
     setIsPlaying(true)
-    spotifyApi.play({ uris: [track?.track?.uri] })
+    console.log(track)
+    spotifyApi.play({
+      uris: [track?.track?.uri],
+    })
   }
 
   return (
@@ -29,12 +31,16 @@ function Song({ order, track }) {
           alt={track?.track?.name}
         />
         <div>
-          <p className="w-36 truncate text-white lg:w-64">{track?.track?.name}</p>
+          <p className="w-36 truncate text-white lg:w-64">
+            {track?.track?.name}
+          </p>
           <p className="w-40 ">{track?.track?.artists[0]?.name}</p>
         </div>
       </div>
       <div className="ml-auto flex items-center justify-between md:ml-0">
-        <p className="hidden w-40 md:inline-flex">{track?.track?.album?.name}</p>
+        <p className="hidden w-40 md:inline-flex">
+          {track?.track?.album?.name}
+        </p>
         <p>{millisToMinutesAndSeconds(track?.track?.duration_ms)}</p>
       </div>
     </div>

@@ -1,5 +1,4 @@
 import {
-  HeartIcon,
   VolumeUpIcon as VolumeDownIcon,
 } from '@heroicons/react/outline'
 import {

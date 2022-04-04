@@ -6,7 +6,7 @@ import {
   RssIcon,
 } from '@heroicons/react/outline'
 import { HeartIcon } from '@heroicons/react/solid'
-import { signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { playlistIdState, playlistOffsetState } from '../atoms/playlistAtom'
